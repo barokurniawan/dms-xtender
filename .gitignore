@@ -1,7 +1,2 @@
 target/
-!target/
-!target/.gitkeep
-
 bin/
-!bin/
-!target/.gitkeep
