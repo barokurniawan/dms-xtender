@@ -5,6 +5,14 @@
  */
 package com.dms.xtender;
 
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author 0395
@@ -144,9 +152,15 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         btnTransferSAP.setText("TRANSFER TO SAP");
+        btnTransferSAP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransferSAPActionPerformed(evt);
+            }
+        });
 
         txtProgressLog.setBackground(new java.awt.Color(0, 0, 102));
         txtProgressLog.setColumns(20);
+        txtProgressLog.setForeground(new java.awt.Color(255, 255, 255));
         txtProgressLog.setRows(5);
         jScrollPane1.setViewportView(txtProgressLog);
 
@@ -155,8 +169,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COMMA, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setText("Settings");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
@@ -204,6 +217,53 @@ public class MainForm extends javax.swing.JFrame {
         (new SettingForm()).setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
+        String FETCH_ADDRESS = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getFetchData();
+        createLogs("Fetching data from DMS..");
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .url(FETCH_ADDRESS)
+            .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            createLogs("Fetching data failed..");
+            createLogs(ex.getMessage());
+        }
+
+        if(response == null){
+            createLogs("###### Process stoped!! ######");
+            return;
+        }
+
+        Headers responseHeaders = response.headers();
+        for (int i = 0; i < responseHeaders.size(); i++) {
+            createLogs(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+        }
+
+        try {
+            createLogs(response.body().string());
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        createLogs("Fetching data success..");
+        createLogs("Ready to transfer..");
+    }//GEN-LAST:event_btnTransferSAPActionPerformed
+
+    private void createLogs(String message)
+    {
+        if(message == null){
+            txtProgressLog.setText("");
+            return;
+        }
+        
+        txtProgressLog.append(message + "\n");
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -234,7 +294,7 @@ public class MainForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-			public void run() {
+            public void run() {
                 new MainForm().setVisible(true);
             }
         });

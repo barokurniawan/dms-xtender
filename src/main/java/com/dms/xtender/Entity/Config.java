@@ -10,7 +10,7 @@ package com.dms.xtender.Entity;
  * @author 0395
  */
 public class Config {
-    String DmsAddress = "http://103.93.161.49:3100/";
+    String DmsAddress = "";
     String FetchData = "";
     String SitEndPoint = "";
     String SaveData = "";

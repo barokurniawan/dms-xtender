@@ -75,7 +75,7 @@ public class SettingForm extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Header Information"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("End Point"));
 
         jLabel2.setText("Fetch Data");
 
@@ -151,6 +151,8 @@ public class SettingForm extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addGap(31, 31, 31))
         );
+
+        jPanel1.getAccessibleContext().setAccessibleName("End Point");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
