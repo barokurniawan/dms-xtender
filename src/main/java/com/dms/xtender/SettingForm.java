@@ -24,6 +24,7 @@ public class SettingForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         ConfigAccessor = ConfigAL.GetInstance();
         
+        this.setTitle("Setting Form");
         txtDmsAddress.setText(ConfigAccessor.GetConfig().GetDmsAddress());
         txtConfigFetchData.setText(ConfigAccessor.GetConfig().getFetchData());
         txtSitEndPoint.setText(ConfigAccessor.GetConfig().getSitEndPoint());
