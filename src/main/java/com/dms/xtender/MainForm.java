@@ -6,7 +6,6 @@
 package com.dms.xtender;
 
 import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -27,8 +26,8 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setLocationRelativeTo(null);
+        setTitle("DMS X-tender");
         
-        this.setTitle("DMS X-tender");
         txtUid.setText(String.valueOf(EntryPoint.user.getUid()));
         txtName.setText(EntryPoint.user.getName());
     }
@@ -267,11 +266,11 @@ public class MainForm extends javax.swing.JFrame {
     private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
         String FETCH_ADDRESS = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getFetchData();
         createLogs("Fetching data from DMS..");
-        
+
         RequestBody requestBody = new FormEncodingBuilder()
                 .add("json", "json here")
                 .build();
-        
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
             .url(FETCH_ADDRESS)
