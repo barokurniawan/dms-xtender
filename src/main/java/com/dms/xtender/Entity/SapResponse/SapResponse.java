@@ -9,11 +9,11 @@ package com.dms.xtender.Entity.SapResponse;
  *
  * @author 0395
  */
-public class Response {
+public class SapResponse {
     private String intId;
     private String ids;
     private boolean success;
-    private Message[] msgs;
+    private SapMessage[] msgs;
 
     public String getIntId() {
         return intId;
@@ -39,11 +39,11 @@ public class Response {
         this.success = success;
     }
 
-    public Message[] getMsgs() {
+    public SapMessage[] getMsgs() {
         return msgs;
     }
 
-    public void setMsgs(Message[] msgs) {
+    public void setMsgs(SapMessage[] msgs) {
         this.msgs = msgs;
     }   
 }

@@ -9,7 +9,7 @@ package com.dms.xtender.Entity.SapResponse;
  *
  * @author 0395
  */
-public class Message {
+public class SapMessage {
     private String MSG_STR;
     private String MSG_REF1;
     private String PACKG_UUID;

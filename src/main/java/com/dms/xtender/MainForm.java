@@ -5,6 +5,7 @@
  */
 package com.dms.xtender;
 
+import com.dms.xtender.Utils.LogMessage;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -19,7 +20,8 @@ import java.util.logging.Logger;
  * @author 0395
  */
 public class MainForm extends javax.swing.JFrame {
-
+    private LogMessage LogWriter;
+    
     /**
      * Creates new form MainForm
      */
@@ -27,9 +29,10 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("DMS X-tender");
-        
+
         txtUid.setText(String.valueOf(EntryPoint.user.getUid()));
         txtName.setText(EntryPoint.user.getName());
+        LogWriter = LogMessage.GetInstance(txtProgressLog);
     }
 
     /**
@@ -265,7 +268,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
         String FETCH_ADDRESS = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getFetchData();
-        createLogs("Fetching data from DMS..");
+        LogWriter.Add("Fetching data from DMS..");
 
         RequestBody requestBody = new FormEncodingBuilder()
                 .add("json", "json here")
@@ -282,41 +285,31 @@ public class MainForm extends javax.swing.JFrame {
             response = client.newCall(request).execute();
         } catch (IOException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            createLogs("Fetching data failed..");
-            createLogs(ex.getMessage());
+            LogWriter.Add("Fetching data failed..");
+            LogWriter.Add(ex.getMessage());
         }
 
         if(response == null){
-            createLogs("###### Process stoped!! ######");
+            LogWriter.Add("###### Process stoped!! ######");
             return;
         }
         
         if(response.code() != 200){
-            createLogs("###### Process stoped!! ######");
-            createLogs("response : " + response.code() + ", " + response.message());
+            LogWriter.Add("###### Process stoped!! ######");
+            LogWriter.Add("response : " + response.code() + ", " + response.message());
             return;
         }
 
         try {
-            createLogs(response.body().string());
+            LogWriter.Add(response.body().string());
         } catch (IOException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        createLogs("Fetching data success..");
-        createLogs("Ready to transfer..");
+        LogWriter.Add("Fetching data success..");
+        LogWriter.Add("Ready to transfer..");
     }//GEN-LAST:event_btnTransferSAPActionPerformed
 
-    private void createLogs(String message)
-    {
-        if(message == null){
-            txtProgressLog.setText("");
-            return;
-        }
-        
-        txtProgressLog.append(message + "\n");
-    }
-    
     /**
      * @param args the command line arguments
      */
