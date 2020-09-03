@@ -12,8 +12,9 @@ package com.dms.xtender.Entity.DmsResponse;
 public class DmsResponse {
     private boolean info;
     private String message;
+    private Payload items;
 
-    public boolean isInfo() {
+    public boolean getInfo() {
         return info;
     }
 
@@ -28,4 +29,14 @@ public class DmsResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public Payload getItems() {
+        return items;
+    }
+
+    public void setItems(Payload items) {
+        this.items = items;
+    }
+    
+    
 }

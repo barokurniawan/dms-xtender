@@ -5,7 +5,10 @@
  */
 package com.dms.xtender;
 
+import com.dms.xtender.Entity.DmsResponse.DmsResponse;
+import com.dms.xtender.Entity.DmsResponse.Payload;
 import com.dms.xtender.Utils.LogMessage;
+import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -14,6 +17,8 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import com.dms.xtender.Utils.Constant;
 
 /**
  *
@@ -21,6 +26,8 @@ import java.util.logging.Logger;
  */
 public class MainForm extends javax.swing.JFrame {
     private LogMessage LogWriter;
+    private int APP_STATE;
+    private Payload TransferPayload;
     
     /**
      * Creates new form MainForm
@@ -33,8 +40,10 @@ public class MainForm extends javax.swing.JFrame {
         txtUid.setText(String.valueOf(EntryPoint.user.getUid()));
         txtName.setText(EntryPoint.user.getName());
         LogWriter = LogMessage.GetInstance(txtProgressLog);
+        
+        APP_STATE = Constant.READ_STATE;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,15 +57,15 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtTotalRows = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtCustomerCode = new javax.swing.JTextField();
+        txtCompCode = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtTotalRows1 = new javax.swing.JTextField();
-        txtTotalRows2 = new javax.swing.JTextField();
+        txtBusDate = new javax.swing.JTextField();
+        txtPstDate = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtTotalRows3 = new javax.swing.JTextField();
+        txtSySource = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtTotalRows4 = new javax.swing.JTextField();
+        txtIntId = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtUid = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
@@ -80,28 +89,28 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel2.setText("COMP_CODE");
 
-        txtCustomerCode.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        txtCustomerCode.setEnabled(false);
+        txtCompCode.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        txtCompCode.setEnabled(false);
 
         jLabel3.setText("BUS_DATE");
 
-        txtTotalRows1.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        txtTotalRows1.setEnabled(false);
+        txtBusDate.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        txtBusDate.setEnabled(false);
 
-        txtTotalRows2.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        txtTotalRows2.setEnabled(false);
+        txtPstDate.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        txtPstDate.setEnabled(false);
 
         jLabel4.setText("PST_DATE");
 
         jLabel5.setText("SY_SOURCE");
 
-        txtTotalRows3.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        txtTotalRows3.setEnabled(false);
+        txtSySource.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        txtSySource.setEnabled(false);
 
         jLabel6.setText("INT_ID");
 
-        txtTotalRows4.setDisabledTextColor(new java.awt.Color(51, 51, 51));
-        txtTotalRows4.setEnabled(false);
+        txtIntId.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        txtIntId.setEnabled(false);
 
         jLabel7.setText("UID");
 
@@ -124,8 +133,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtTotalRows3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-                                    .addComponent(txtTotalRows1, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtSySource, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                                    .addComponent(txtBusDate, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtTotalRows, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel1)
@@ -140,19 +149,17 @@ public class MainForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel2)
                                 .addComponent(jLabel4)
-                                .addComponent(txtTotalRows2, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                .addComponent(txtCustomerCode))
+                                .addComponent(txtPstDate, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(txtCompCode))
                             .addComponent(jLabel6)
-                            .addComponent(txtTotalRows4, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtIntId, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(txtUid, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel8)
                             .addComponent(txtName))))
                 .addGap(20, 20, 20))
         );
@@ -164,7 +171,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCustomerCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtCompCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -174,21 +181,21 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalRows2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtPstDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalRows1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtBusDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalRows4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtIntId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalRows3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtSySource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -202,7 +209,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnTransferSAP.setText("TRANSFER TO SAP");
+        btnTransferSAP.setText("GET FROM DMS");
         btnTransferSAP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTransferSAPActionPerformed(evt);
@@ -215,7 +222,7 @@ public class MainForm extends javax.swing.JFrame {
         txtProgressLog.setRows(5);
         jScrollPane1.setViewportView(txtProgressLog);
 
-        jMenu1.setText("DMSApplet");
+        jMenu1.setText("DMS Xtender");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COMMA, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setText("Settings");
@@ -243,7 +250,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap())
             .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
-                .addGap(138, 138, 138)
+                .addGap(144, 144, 144)
                 .addComponent(btnTransferSAP)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -252,9 +259,9 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(btnTransferSAP)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -267,11 +274,24 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
+        if(APP_STATE == Constant.READ_STATE){
+            getDataFromDms();
+        }
+        
+        if(APP_STATE == Constant.PUSH_STATE){
+            JOptionPane.showMessageDialog(null, "TF");
+            Gson gson = new Gson();
+
+            LogWriter.Add(gson.toJson(TransferPayload));
+        }
+    }//GEN-LAST:event_btnTransferSAPActionPerformed
+
+    private void getDataFromDms(){
         String FETCH_ADDRESS = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getFetchData();
         LogWriter.Add("Fetching data from DMS..");
 
         RequestBody requestBody = new FormEncodingBuilder()
-                .add("json", "json here")
+                .add("uid", String.valueOf(EntryPoint.user.getUid()))
                 .build();
 
         OkHttpClient client = new OkHttpClient();
@@ -301,15 +321,34 @@ public class MainForm extends javax.swing.JFrame {
         }
 
         try {
-            LogWriter.Add(response.body().string());
+            Gson gson = new Gson();
+            DmsResponse dmsResponse = gson.fromJson(response.body().string(), DmsResponse.class);
+            
+            if(!dmsResponse.getInfo()){
+                JOptionPane.showMessageDialog(null, dmsResponse.getMessage());
+                LogWriter.Add("###### Process stoped!! ######");
+                LogWriter.Add("response : " + response.code() + ", " + response.message());
+                return;
+            }
+            
+            TransferPayload = dmsResponse.getItems();
+            txtTotalRows.setText(TransferPayload.getTOTALROW());
+            txtCompCode.setText(TransferPayload.getCOMP_CODE());
+            txtBusDate.setText(TransferPayload.getBUS_DATE());
+            txtPstDate.setText(TransferPayload.getPST_DATE());
+            txtIntId.setText(TransferPayload.getINT_ID());
+            txtSySource.setText(TransferPayload.getSY_SOURCE());            
         } catch (IOException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         LogWriter.Add("Fetching data success..");
         LogWriter.Add("Ready to transfer..");
-    }//GEN-LAST:event_btnTransferSAPActionPerformed
-
+        
+        btnTransferSAP.setText("TRANSFER TO SAP");
+        APP_STATE = Constant.PUSH_STATE;        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -362,14 +401,14 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField txtCustomerCode;
+    private javax.swing.JTextField txtBusDate;
+    private javax.swing.JTextField txtCompCode;
+    private javax.swing.JTextField txtIntId;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtProgressLog;
+    private javax.swing.JTextField txtPstDate;
+    private javax.swing.JTextField txtSySource;
     private javax.swing.JTextField txtTotalRows;
-    private javax.swing.JTextField txtTotalRows1;
-    private javax.swing.JTextField txtTotalRows2;
-    private javax.swing.JTextField txtTotalRows3;
-    private javax.swing.JTextField txtTotalRows4;
     private javax.swing.JTextField txtUid;
     // End of variables declaration//GEN-END:variables
 }

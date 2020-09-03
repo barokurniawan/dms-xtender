@@ -6,7 +6,7 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="DMSApplet"/>
+            <Property name="text" type="java.lang.String" value="DMS Xtender"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
@@ -60,7 +60,7 @@
           </Group>
           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
               <Component id="btnTransferSAP" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -71,9 +71,9 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="35" max="32767" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
               <Component id="btnTransferSAP" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="133" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -100,8 +100,8 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="txtTotalRows3" alignment="0" pref="173" max="32767" attributes="0"/>
-                                      <Component id="txtTotalRows1" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtSySource" alignment="0" pref="173" max="32767" attributes="0"/>
+                                      <Component id="txtBusDate" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtTotalRows" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -122,11 +122,11 @@
                               <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtTotalRows2" alignment="0" pref="163" max="32767" attributes="0"/>
-                                  <Component id="txtCustomerCode" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtPstDate" alignment="0" pref="163" max="32767" attributes="0"/>
+                                  <Component id="txtCompCode" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtTotalRows4" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                              <Component id="txtIntId" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -153,7 +153,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtCustomerCode" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCompCode" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -166,12 +166,12 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtTotalRows2" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPstDate" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtTotalRows1" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtBusDate" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -179,12 +179,12 @@
                       <Group type="102" attributes="0">
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtTotalRows4" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtIntId" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtTotalRows3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtSySource" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -224,7 +224,7 @@
             <Property name="text" type="java.lang.String" value="COMP_CODE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCustomerCode">
+        <Component class="javax.swing.JTextField" name="txtCompCode">
           <Properties>
             <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -237,7 +237,7 @@
             <Property name="text" type="java.lang.String" value="BUS_DATE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTotalRows1">
+        <Component class="javax.swing.JTextField" name="txtBusDate">
           <Properties>
             <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -245,7 +245,7 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTotalRows2">
+        <Component class="javax.swing.JTextField" name="txtPstDate">
           <Properties>
             <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -263,7 +263,7 @@
             <Property name="text" type="java.lang.String" value="SY_SOURCE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTotalRows3">
+        <Component class="javax.swing.JTextField" name="txtSySource">
           <Properties>
             <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -276,7 +276,7 @@
             <Property name="text" type="java.lang.String" value="INT_ID"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTotalRows4">
+        <Component class="javax.swing.JTextField" name="txtIntId">
           <Properties>
             <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="33" type="rgb"/>
@@ -314,7 +314,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnTransferSAP">
       <Properties>
-        <Property name="text" type="java.lang.String" value="TRANSFER TO SAP"/>
+        <Property name="text" type="java.lang.String" value="GET FROM DMS"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTransferSAPActionPerformed"/>
