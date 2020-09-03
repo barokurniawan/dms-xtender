@@ -7,6 +7,8 @@ package com.dms.xtender;
 
 import com.dms.xtender.Entity.DmsResponse.DmsResponse;
 import com.dms.xtender.Entity.DmsResponse.Payload;
+import com.dms.xtender.Entity.SapResponse.SapMessage;
+import com.dms.xtender.Entity.SapResponse.SapResponse;
 import com.dms.xtender.Utils.LogMessage;
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -276,16 +278,75 @@ public class MainForm extends javax.swing.JFrame {
     private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
         if(APP_STATE == Constant.READ_STATE){
             getDataFromDms();
+            return;
         }
         
         if(APP_STATE == Constant.PUSH_STATE){
-            JOptionPane.showMessageDialog(null, "TF");
-            Gson gson = new Gson();
-
-            LogWriter.Add(gson.toJson(TransferPayload));
+            transferToSap();
+            return;
         }
     }//GEN-LAST:event_btnTransferSAPActionPerformed
 
+    private void transferToSap()
+    {
+        String SIT_ADDRESS = EntryPoint.config.getSitEndPoint();
+        Gson gson = new Gson();
+        
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("json", gson.toJson(TransferPayload))
+                .add("functionName", EntryPoint.config.getFunctionName())
+                .add("intId", EntryPoint.config.getIntId())
+                .add("idField", EntryPoint.config.getIdField())
+                .build();
+        
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .url(SIT_ADDRESS)
+            .post(requestBody)
+            .build();
+        
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            LogWriter.Add("Fetching data failed..");
+            LogWriter.Add(ex.getMessage());
+        }
+
+        if(response == null){
+            LogWriter.Add("###### Process stoped!! ######");
+            return;
+        }
+
+        if(response.code() != 200){
+            LogWriter.Add("###### Process stoped!! ######");
+            LogWriter.Add("response : " + response.code() + ", " + response.message());
+            return;
+        }
+        
+        try {
+            gson = new Gson();
+            SapResponse sapResponse = gson.fromJson(response.body().string(), SapResponse.class);
+            
+            if(!sapResponse.isSuccess()){
+                SapMessage[] msgs = sapResponse.getMsgs();
+                for(int i = 0; i < msgs.length; i++){
+                   LogWriter.Add(msgs[i].getMSG_STR());
+                }
+                
+                LogWriter.Add("###### Process stoped!! ######");
+                LogWriter.Add("response : " + response.code() + ", " + response.message());
+                return;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        LogWriter.Add("Transfer Success..");
+        APP_STATE = Constant.READ_STATE;
+    }
+    
     private void getDataFromDms(){
         String FETCH_ADDRESS = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getFetchData();
         LogWriter.Add("Fetching data from DMS..");
@@ -313,7 +374,7 @@ public class MainForm extends javax.swing.JFrame {
             LogWriter.Add("###### Process stoped!! ######");
             return;
         }
-        
+
         if(response.code() != 200){
             LogWriter.Add("###### Process stoped!! ######");
             LogWriter.Add("response : " + response.code() + ", " + response.message());

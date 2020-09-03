@@ -14,6 +14,9 @@ public class Config {
     String FetchData = "";
     String SitEndPoint = "";
     String SaveData = "";
+    String FunctionName = "";
+    String IntId = "";
+    String IdField = "";
 
     public String getFetchData() {
         return FetchData;
@@ -47,5 +50,29 @@ public class Config {
     public void SetDmsAddress(String httpAddress)
     {
         DmsAddress = httpAddress;
+    }
+
+    public String getFunctionName() {
+        return FunctionName;
+    }
+
+    public void setFunctionName(String FunctionName) {
+        this.FunctionName = FunctionName;
+    }
+
+    public String getIntId() {
+        return IntId;
+    }
+
+    public void setIntId(String IntId) {
+        this.IntId = IntId;
+    }
+
+    public String getIdField() {
+        return IdField;
+    }
+
+    public void setIdField(String IdField) {
+        this.IdField = IdField;
     }
 }
