@@ -29,5 +29,7 @@ public class LogMessage {
     
     public void Add(String message){
         TargetControll.append(message + "\n");
+        TargetControll.setCaretPosition(TargetControll.getText().length());
+
     }
 }

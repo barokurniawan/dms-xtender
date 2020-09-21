@@ -21,6 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import com.dms.xtender.Utils.Constant;
+import com.google.gson.JsonSyntaxException;
+import java.util.concurrent.TimeUnit;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -276,13 +279,41 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btnTransferSAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferSAPActionPerformed
+        btnTransferSAP.setEnabled(false);
+        
         if(APP_STATE == Constant.READ_STATE){
-            getDataFromDms();
+            SwingWorker sw = new SwingWorker() {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    getDataFromDms();
+                    return null;
+                }
+
+                @Override
+                public void done() {
+                    btnTransferSAP.setEnabled(true);
+                }
+            };
+            
+            sw.execute();
             return;
         }
         
         if(APP_STATE == Constant.PUSH_STATE){
-            transferToSap();
+            SwingWorker sw2 = new SwingWorker() {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    transferToSap();
+                    return null;
+                }
+                
+                @Override
+                public void done() {
+                    btnTransferSAP.setEnabled(true);
+                }
+            };
+            
+            sw2.execute();
             return;
         }
     }//GEN-LAST:event_btnTransferSAPActionPerformed
@@ -299,7 +330,19 @@ public class MainForm extends javax.swing.JFrame {
                 .add("idField", EntryPoint.config.getIdField())
                 .build();
         
+        LogWriter.Add("Sending with payload..");
+        LogWriter.Add("JSON: " + gson.toJson(TransferPayload));
+        LogWriter.Add("functionName : " + EntryPoint.config.getFunctionName());
+        LogWriter.Add("intId : " + EntryPoint.config.getIntId());
+        LogWriter.Add("idField : " + EntryPoint.config.getIdField());
+        
+        LogWriter.Add(".");
+        LogWriter.Add(".");
+        LogWriter.Add("WAITING RESPONSE..");
         OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(5, TimeUnit.MINUTES); // connect timeout
+        client.setReadTimeout(5, TimeUnit.MINUTES);    // socket timeout
+
         Request request = new Request.Builder()
             .url(SIT_ADDRESS)
             .post(requestBody)
@@ -310,8 +353,9 @@ public class MainForm extends javax.swing.JFrame {
             response = client.newCall(request).execute();
         } catch (IOException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            LogWriter.Add("Fetching data failed..");
-            LogWriter.Add(ex.getMessage());
+            LogWriter.Add("########################");
+            LogWriter.Add("TRANSFER DATA FAILED..");
+            LogWriter.Add("message : "+ ex.getMessage());
         }
 
         if(response == null){
@@ -327,24 +371,73 @@ public class MainForm extends javax.swing.JFrame {
         
         try {
             gson = new Gson();
-            SapResponse sapResponse = gson.fromJson(response.body().string(), SapResponse.class);
+            SapResponse[] sapResponse = gson.fromJson(response.body().string(), SapResponse[].class);
             
-            if(!sapResponse.isSuccess()){
-                SapMessage[] msgs = sapResponse.getMsgs();
-                for(int i = 0; i < msgs.length; i++){
-                   LogWriter.Add(msgs[i].getMSG_STR());
+            if(!sapResponse[0].isSuccess()){
+                SapMessage[] msgs = sapResponse[0].getMsgs();
+                for (SapMessage msg : msgs) {
+                    LogWriter.Add(msg.getMSG_REF1() + " - " + msg.getMSG_STR());
                 }
-                
+
                 LogWriter.Add("###### Process stoped!! ######");
                 LogWriter.Add("response : " + response.code() + ", " + response.message());
                 return;
             }
         } catch (IOException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            LogWriter.Add("message : " + ex.getMessage());
+        } catch (JsonSyntaxException th){
+            LogWriter.Add("message : " + th.getMessage());
         }
+        
+        LogWriter.Add("######################");
+        LogWriter.Add("TRANSFER SUCCESS..");
+        
+        LogWriter.Add(".");
+        LogWriter.Add(".");
+        LogWriter.Add("CREATING HISTORY..");
+        String HISTORY_API = EntryPoint.config.GetDmsAddress() + EntryPoint.config.getSaveData();
+        
+        RequestBody requestBody2 = new FormEncodingBuilder()
+                .add("uid", String.valueOf(EntryPoint.user.getUid()))
+                .build();
+        
+        try
+        {
+            Request request2 = new Request.Builder()
+                .url(HISTORY_API)
+                .post(requestBody2)
+                .build();
+            Response response2 = null;
+            try {
+                response2 = client.newCall(request2).execute();
+            } catch (IOException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                LogWriter.Add("message : "+ ex.getMessage());
+            }
 
-        LogWriter.Add("Transfer Success..");
-        APP_STATE = Constant.READ_STATE;
+            if(response2 == null){
+                LogWriter.Add("###### Process stoped!! ######");
+                return;
+            }
+
+            if(response2.code() != 200){
+                LogWriter.Add("###### Process stoped!! ######");
+                LogWriter.Add("response : " + response2.code() + ", " + response2.message());
+                return;
+            }
+
+            LogWriter.Add(".");
+            LogWriter.Add(".");
+            LogWriter.Add("#################################");
+            LogWriter.Add("DONE..");
+            LogWriter.Add(response2.body().toString());
+            APP_STATE = Constant.READ_STATE;
+        } catch (Exception ex)
+        {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            LogWriter.Add("message : "+ ex.getMessage());
+        }
     }
     
     private void getDataFromDms(){
@@ -403,8 +496,15 @@ public class MainForm extends javax.swing.JFrame {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        LogWriter.Add("Fetching data success..");
-        LogWriter.Add("Ready to transfer..");
+        LogWriter.Add(".");
+        LogWriter.Add(".");
+        LogWriter.Add("########################");
+        LogWriter.Add("FETCHING DATA SUCCESS..");
+        
+        LogWriter.Add(".");
+        LogWriter.Add(".");
+        LogWriter.Add("########################");
+        LogWriter.Add("READY TO TRANSFER..");
         
         btnTransferSAP.setText("TRANSFER TO SAP");
         APP_STATE = Constant.PUSH_STATE;        
