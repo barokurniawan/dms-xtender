@@ -340,8 +340,8 @@ public class MainForm extends javax.swing.JFrame {
         LogWriter.Add(".");
         LogWriter.Add("WAITING RESPONSE..");
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(5, TimeUnit.MINUTES); // connect timeout
-        client.setReadTimeout(5, TimeUnit.MINUTES);    // socket timeout
+        client.setConnectTimeout(1, TimeUnit.HOURS); // connect timeout
+        client.setReadTimeout(1, TimeUnit.HOURS);    // socket timeout
 
         Request request = new Request.Builder()
             .url(SIT_ADDRESS)
@@ -500,12 +500,12 @@ public class MainForm extends javax.swing.JFrame {
         LogWriter.Add(".");
         LogWriter.Add("########################");
         LogWriter.Add("FETCHING DATA SUCCESS..");
-        
+
         LogWriter.Add(".");
         LogWriter.Add(".");
         LogWriter.Add("########################");
         LogWriter.Add("READY TO TRANSFER..");
-        
+
         btnTransferSAP.setText("TRANSFER TO SAP");
         APP_STATE = Constant.PUSH_STATE;        
     }
