@@ -24,6 +24,15 @@ public class PayloadItems {
     private String CONNO;
     private String TEXT;
     private String BUS_UUID;
+    private String RESV2;
+
+    public String getRESV2() {
+        return RESV2;
+    }
+
+    public void setRESV2(String RESV2) {
+        this.RESV2 = RESV2;
+    }
 
     public int getROW_ID() {
         return ROW_ID;
